@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 
 public record CriarConsultaRequest(
         Long pacienteId,
-        Long profissionalId,
-        LocalDateTime dataHora,
+        Long agendaId,
         TipoConsulta tipo
 ) {}

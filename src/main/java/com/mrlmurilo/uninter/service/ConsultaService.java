@@ -1,5 +1,6 @@
 package com.mrlmurilo.uninter.service;
 
+import com.mrlmurilo.uninter.domain.agenda.Agenda;
 import com.mrlmurilo.uninter.domain.consulta.Consulta;
 import com.mrlmurilo.uninter.domain.consulta.StatusConsulta;
 import com.mrlmurilo.uninter.domain.paciente.Paciente;
@@ -20,10 +21,29 @@ public class ConsultaService {
 
     private final ConsultaRepository consultaRepository;
     private final PacienteRepository pacienteRepository;
-    private final ProfissionalSaudeRepository profissionalRepository;
+    private final AgendaService agendaService;
 
     public ConsultaResponse criar(CriarConsultaRequest request) {
-        Consulta consulta = criarConsultaInterno(request);
+
+        Paciente paciente = pacienteRepository.findById(request.pacienteId())
+                .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
+
+        // 🔹 Busca agenda disponível
+        Agenda agenda = agendaService.buscarHorarioDisponivel(request.agendaId());
+
+        Consulta consulta = Consulta.builder()
+                .paciente(paciente)
+                .profissional(agenda.getProfissional())
+                .agenda(agenda)
+                .tipo(request.tipo())
+                .status(StatusConsulta.AGENDADA)
+                .build();
+
+        consultaRepository.save(consulta);
+
+        // 🔹 Ocupa o horário
+        agendaService.ocuparHorario(agenda);
+
         return toResponse(consulta);
     }
 
@@ -34,24 +54,6 @@ public class ConsultaService {
                 .toList();
     }
 
-
-    public ConsultaResponse buscarPorId(Long id) {
-        Consulta consulta = consultaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
-
-        return new ConsultaResponse(
-                consulta.getId(),
-                consulta.getPaciente().getId(),
-                consulta.getPaciente().getNome(),
-                consulta.getProfissional().getId(),
-                consulta.getProfissional().getNome(),
-                consulta.getDataHora(),
-                consulta.getTipo(),
-                consulta.getStatus()
-        );
-
-    }
-
     private ConsultaResponse toResponse(Consulta consulta) {
         return new ConsultaResponse(
                 consulta.getId(),
@@ -59,30 +61,10 @@ public class ConsultaService {
                 consulta.getPaciente().getNome(),
                 consulta.getProfissional().getId(),
                 consulta.getProfissional().getNome(),
-                consulta.getDataHora(),
+                consulta.getAgenda().getData(),
+                consulta.getAgenda().getHora(),
                 consulta.getTipo(),
                 consulta.getStatus()
         );
     }
-
-    private Consulta criarConsultaInterno(CriarConsultaRequest request) {
-
-        Paciente paciente = pacienteRepository.findById(request.pacienteId())
-                .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
-
-        ProfissionalSaude profissional = profissionalRepository.findById(request.profissionalId())
-                .orElseThrow(() -> new RuntimeException("Profissional não encontrado"));
-
-        Consulta consulta = Consulta.builder()
-                .paciente(paciente)
-                .profissional(profissional)
-                .dataHora(request.dataHora())
-                .tipo(request.tipo())
-                .status(StatusConsulta.AGENDADA)
-                .build();
-
-        return consultaRepository.save(consulta);
-    }
-
-
 }

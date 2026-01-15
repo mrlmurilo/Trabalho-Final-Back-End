@@ -1,5 +1,6 @@
 package com.mrlmurilo.uninter.domain.consulta;
 
+import com.mrlmurilo.uninter.domain.agenda.Agenda;
 import com.mrlmurilo.uninter.domain.paciente.Paciente;
 import com.mrlmurilo.uninter.domain.profissional.ProfissionalSaude;
 import jakarta.persistence.*;
@@ -27,8 +28,10 @@ public class Consulta {
     @ManyToOne(optional = false)
     private ProfissionalSaude profissional;
 
-    @Column(nullable = false)
-    private LocalDateTime dataHora;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "agenda_id")
+    private Agenda agenda;
+
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

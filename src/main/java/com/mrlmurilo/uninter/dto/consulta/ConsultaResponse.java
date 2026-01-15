@@ -3,7 +3,8 @@ package com.mrlmurilo.uninter.dto.consulta;
 import com.mrlmurilo.uninter.domain.consulta.StatusConsulta;
 import com.mrlmurilo.uninter.domain.consulta.TipoConsulta;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public record ConsultaResponse(
         Long id,
@@ -11,7 +12,8 @@ public record ConsultaResponse(
         String pacienteNome,
         Long profissionalId,
         String profissionalNome,
-        LocalDateTime dataHora,
+        LocalDate data,
+        LocalTime hora,
         TipoConsulta tipo,
         StatusConsulta status
 ) {}
