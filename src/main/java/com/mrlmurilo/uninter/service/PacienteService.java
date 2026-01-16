@@ -46,7 +46,8 @@ public class PacienteService {
                 paciente.getNome(),
                 paciente.getCpf(),
                 paciente.getEmail(),
-                paciente.getTelefone()
+                paciente.getTelefone(),
+                paciente.getDataNascimento()
         );
     }
 }
