@@ -67,4 +67,26 @@ public class ConsultaService {
                 consulta.getStatus()
         );
     }
+
+    public ConsultaResponse cancelar(Long consultaId) {
+
+        Consulta consulta = consultaRepository.findById(consultaId)
+                .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
+
+        if (consulta.getStatus() == StatusConsulta.CANCELADA) {
+            throw new RuntimeException("Consulta já está cancelada");
+        }
+
+        // 🔹 Cancela consulta
+        consulta.setStatus(StatusConsulta.CANCELADA);
+
+        // 🔹 Libera agenda
+        agendaService.liberarHorario(consulta.getAgenda());
+
+        consultaRepository.save(consulta);
+
+        return toResponse(consulta);
+    }
+
+
 }

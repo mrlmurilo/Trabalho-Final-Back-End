@@ -87,4 +87,10 @@ public class AgendaService {
                 agenda.getStatus()
         );
     }
+
+    public void liberarHorario(Agenda agenda) {
+        agenda.setStatus(StatusAgenda.DISPONIVEL);
+        agendaRepository.save(agenda);
+    }
+
 }

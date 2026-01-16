@@ -24,4 +24,10 @@ public class ConsultaController {
     public List<ConsultaResponse> listar() {
         return consultaService.listar();
     }
+
+    @PatchMapping("/{id}/cancelar")
+    public ConsultaResponse cancelar(@PathVariable Long id) {
+        return consultaService.cancelar(id);
+    }
+
 }
