@@ -32,7 +32,6 @@ public class Consulta {
     @JoinColumn(name = "agenda_id")
     private Agenda agenda;
 
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TipoConsulta tipo;
