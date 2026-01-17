@@ -9,10 +9,4 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
-
-    List<Consulta> findByPaciente(Paciente paciente);
-
-    List<Consulta> findByProfissional(ProfissionalSaude profissional);
-
-    boolean existsByProfissionalAndDataHora(ProfissionalSaude profissional, LocalDateTime dataHora);
 }

@@ -5,3 +5,4 @@ public record CriarProntuarioRequest(
         String descricao,
         String prescricao
 ) {}
+
