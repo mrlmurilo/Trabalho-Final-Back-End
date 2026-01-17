@@ -24,11 +24,12 @@ public class AuditLog {
     private AuditAction action;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
     @Column(nullable = false)
     private LocalDateTime dataHora;
 
-    @Column(length = 500)
+    @Column(name = "detalhes", length = 500)
     private String detalhe;
 }
