@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -19,16 +20,21 @@ public class AuthService {
 
     public LoginResponse login(LoginRequest request) {
 
-        Authentication authentication = authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.email(),
-                        request.password()
-                )
-        );
+        try {
 
-        UserDetails user = (UserDetails) authentication.getPrincipal();
-        String token = jwtService.gerarToken(user);
+            Authentication authentication = authManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.email(),
+                            request.password()
+                    )
+            );
+            UserDetails user = (UserDetails) authentication.getPrincipal();
+            String token = jwtService.gerarToken(user);
+            return new LoginResponse(token);
+        } catch (AuthenticationException ex) {
+            throw new RuntimeException("Email ou senha inválidos");
+        }
 
-        return new LoginResponse(token);
+
     }
 }

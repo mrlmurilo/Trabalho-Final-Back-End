@@ -30,4 +30,10 @@ public class ConsultaController {
         return consultaService.cancelar(id);
     }
 
+    @PutMapping("/{id}/finalizar")
+    public ConsultaResponse finalizar(@PathVariable Long id) {
+        return consultaService.finalizar(id);
+    }
+
+
 }
