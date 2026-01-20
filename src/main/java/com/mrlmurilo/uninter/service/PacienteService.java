@@ -21,6 +21,7 @@ public class PacienteService {
                 .cpf(request.cpf())
                 .email(request.email())
                 .telefone(request.telefone())
+                .dataNascimento(request.dataNascimento())
                 .build();
 
         paciente = pacienteRepository.save(paciente);
