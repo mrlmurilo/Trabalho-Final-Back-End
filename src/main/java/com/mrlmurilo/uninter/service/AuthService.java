@@ -25,7 +25,7 @@ public class AuthService {
             Authentication authentication = authManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.email(),
-                            request.password()
+                            request.senha()
                     )
             );
             UserDetails user = (UserDetails) authentication.getPrincipal();
