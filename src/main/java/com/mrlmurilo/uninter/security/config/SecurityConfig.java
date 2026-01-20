@@ -1,7 +1,6 @@
 package com.mrlmurilo.uninter.security.config;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.security.autoconfigure.web.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,19 +22,24 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
-                .headers(headers -> headers
-                        .frameOptions(frame -> frame.disable())
-                )
+    public SecurityFilterChain filterChain(
+            HttpSecurity http,
+            AuthenticationProvider authenticationProvider
+    ) throws Exception {
+
+        http.csrf(AbstractHttpConfigurer::disable)
+                .authenticationProvider(authenticationProvider)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/prontuarios/**").hasRole("PROFISSIONAL")
-                        .requestMatchers("/consultas/**").hasAnyRole("ATENDENTE", "ADMIN")
+                        .requestMatchers(
+                                "/auth/**",
+                                "/pacientes",
+                                "/usuarios"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .headers(headers ->
+                        headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
+                );
 
         return http.build();
     }
