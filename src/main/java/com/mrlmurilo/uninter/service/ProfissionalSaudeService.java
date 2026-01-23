@@ -19,6 +19,7 @@ public class ProfissionalSaudeService {
         ProfissionalSaude profissional = ProfissionalSaude.builder()
                 .nome(request.nome())
                 .especialidade(request.especialidade())
+                .registroProfissional(request.registroProfissional())
                 .telefone(request.telefone())
                 .email(request.email())
                 .build();
