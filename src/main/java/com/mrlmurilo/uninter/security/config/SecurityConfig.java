@@ -41,10 +41,9 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // Adicione
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**",
-                                "/profissionais/**").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/pacientes/**",
-                                "/consultas/**"
+                                "/consultas/**","/profissionais/**"
                                 ).authenticated()
                         .anyRequest().authenticated()
                 )
